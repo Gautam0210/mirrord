@@ -1,0 +1,15 @@
+{
+    "feature": {
+      "network": {
+        "incoming": {
+          "mode": "steal",
+          "http_filter": {
+            "header_filter": "X-Tester: abcd",
+            "ports": [8081]
+          }
+        }
+
+      }
+    }
+}
+// mirrord exec -f steall-all-traffic.json --target pod/vote-847bb487f4-jf5j9 python3 app.py

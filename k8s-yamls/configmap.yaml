@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: healthchecks-config
+  # namespace: example-voting-app
+data:
+  redis.sh: |
+    #!/bin/sh
+    redis-cli ping
+  postgres.sh: |
+    #!/bin/sh
+    pg_isready -U postgres

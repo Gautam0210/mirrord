@@ -1,0 +1,56 @@
+apiVersion : apps/v1  
+kind : Deployment  
+metadata :
+  name : db  
+  # namespace : example-voting-app  
+spec :
+  replicas : 1  
+  selector :
+    matchLabels :
+      app : db  
+  template :
+    metadata :
+      labels :
+        app : db  
+    spec :
+      containers :
+      - name : postgres  
+        image : postgres:15-alpine  
+        env :
+        - name : POSTGRES_USER  
+          value : postgres  
+        - name : POSTGRES_PASSWORD   
+          value : postgres   
+        volumeMounts :
+        - name : db-data   
+          mountPath : /var/lib/postgresql/data   
+        - name : healthchecks   
+          mountPath : /healthchecks   
+        readinessProbe :
+          exec :
+            command :
+            - sh   
+            - /healthchecks/postgres.sh   
+          initialDelaySeconds : 5   
+          periodSeconds : 10   
+      volumes :
+      - name : db-data   
+        persistentVolumeClaim :
+          claimName : db-pvc   
+      - name : healthchecks   
+        configMap :
+          name : healthchecks-config   
+      restartPolicy : Always    
+
+---
+apiVersion : v1    
+kind : Service    
+metadata :
+  name : db    
+  # namespace : example-voting-app    
+spec :
+  ports :
+    - port : 5432    
+      targetPort : 5432    
+  selector :
+    app : db    

@@ -1,0 +1,8 @@
+{
+    "feature": {
+      "network": {
+        "incoming": "steal"
+      }
+    }
+}
+// mirrord exec -f steall-all-traffic.json --target pod/vote-847bb487f4-jf5j9 python3 app.py
